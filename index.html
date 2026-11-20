@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<meta name="color-scheme" content="light dark">
+<title>株AI チェック</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <h1>株AI チェック</h1>
+  <div class="top-actions" id="topActions" hidden>
+    <button class="icon-btn" id="reloadBtn" aria-label="読み直す" title="読み直す">↻</button>
+    <button class="icon-btn" id="keyBtn" aria-label="鍵の設定" title="鍵の設定">🔑</button>
+  </div>
+</header>
+
+<main>
+  <!-- 鍵の入力 -->
+  <section id="setupView" class="view" hidden>
+    <div class="card">
+      <h2>はじめに鍵を入れてね</h2>
+      <p class="muted">GitHub の fine-grained token（Stock_AI_log だけ・Contents の読み書きだけ）を貼り付けてください。鍵はこのブラウザの中だけに保存され、どこにも送られません（GitHub への問い合わせ以外）。</p>
+      <form id="setupForm" autocomplete="off">
+        <label class="field">
+          <span>GitHub の鍵</span>
+          <input id="tokenInput" type="password" inputmode="text" spellcheck="false" autocapitalize="off" placeholder="github_pat_..." required>
+        </label>
+        <button class="btn primary" type="submit" id="setupBtn">保存してはじめる</button>
+        <p class="msg" id="setupMsg" role="status"></p>
+      </form>
+      <div id="forgetBox" hidden>
+        <hr>
+        <button class="btn danger" type="button" id="forgetBtn">このブラウザから鍵を消す</button>
+        <button class="btn" type="button" id="cancelSetupBtn">もどる</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ダッシュボード -->
+  <section id="dashView" class="view" hidden>
+    <p class="load-msg" id="loadMsg" role="status"></p>
+
+    <div class="card">
+      <h2>これまでの成績</h2>
+      <div id="statsBox"></div>
+    </div>
+
+    <div class="card">
+      <h2 id="todayTitle">今日のおすすめ</h2>
+      <div id="todayBox"></div>
+    </div>
+
+    <div class="card">
+      <h2>確信度ごとの的中率</h2>
+      <div id="calibBox"></div>
+    </div>
+
+    <div class="card">
+      <h2>今後の展望</h2>
+      <div id="outlookBox"></div>
+    </div>
+
+    <div class="card">
+      <h2>見守り専用銘柄</h2>
+      <div id="watchBox"></div>
+    </div>
+  </section>
+
+  <!-- 売買の記録 -->
+  <section id="tradeView" class="view" hidden>
+    <div class="card">
+      <h2>売買を記録する</h2>
+      <form id="tradeForm" autocomplete="off">
+        <div class="seg" role="radiogroup" aria-label="買った／売った">
+          <label><input type="radio" name="side" value="buy" checked><span>買った</span></label>
+          <label><input type="radio" name="side" value="sell"><span>売った</span></label>
+        </div>
+        <div class="row2">
+          <label class="field">
+            <span>銘柄コード</span>
+            <input id="tCode" inputmode="text" list="tickerList" placeholder="例 7203" required maxlength="10" pattern="[0-9A-Za-z]{3,6}">
+          </label>
+          <label class="field">
+            <span>銘柄名</span>
+            <input id="tName" placeholder="例 トヨタ" maxlength="40">
+          </label>
+        </div>
+        <datalist id="tickerList"></datalist>
+        <div class="row2">
+          <label class="field">
+            <span>株数</span>
+            <input id="tShares" type="number" inputmode="numeric" min="1" step="1" required>
+          </label>
+          <label class="field">
+            <span>1株の値段（円）</span>
+            <input id="tPrice" type="number" inputmode="decimal" min="0" step="any" required>
+          </label>
+        </div>
+        <label class="field">
+          <span>メモ</span>
+          <textarea id="tMemo" rows="2" maxlength="300" placeholder="なぜ買った／売ったか"></textarea>
+        </label>
+        <button class="btn primary big" type="submit" id="tradeBtn">記録する</button>
+        <p class="msg" id="tradeMsg" role="status"></p>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2>いま持ってる分</h2>
+      <div id="holdBox"></div>
+    </div>
+
+    <div class="card">
+      <h2>最近の記録</h2>
+      <div id="recentBox"></div>
+    </div>
+  </section>
+</main>
+
+<footer class="bottom" id="bottom">
+  <p class="disclaimer">投資の判断は自分でするもの</p>
+  <nav class="tabs" id="tabs" hidden>
+    <button class="tab" data-view="dashView" aria-current="page"><span class="ti">📊</span>ダッシュボード</button>
+    <button class="tab" data-view="tradeView"><span class="ti">📝</span>売買の記録</button>
+  </nav>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
